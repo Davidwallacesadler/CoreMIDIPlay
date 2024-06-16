@@ -9,9 +9,16 @@ import SwiftUI
 
 @main
 struct MIDIReceiveApp: App {
+    
+    private var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MIDIDeviceList(
+                logModel: appState.logModel,
+                onQueryTapped: appState.packetReceiver.queryDevices,
+                onClearTapped: appState.logModel.clear
+            )
         }
     }
 }

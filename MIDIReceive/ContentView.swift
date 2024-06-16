@@ -6,6 +6,21 @@
 //
 
 import SwiftUI
+import UIKit
+
+extension Image {
+    
+    init(imageURL: URL) {
+        let uiImage = if let imageData = try? Data(contentsOf: imageURL) {
+            UIImage(data: imageData)
+        } else {
+            UIImage(systemName: "exclamationmark.circle")
+        }
+        self.init(uiImage: uiImage!)
+    }
+}
+
+
 
 struct ContentView: View {
     var body: some View {

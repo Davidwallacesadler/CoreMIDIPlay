@@ -8,17 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		901A01242C1BEAA100CFA42A /* MIDIReceiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01232C1BEAA100CFA42A /* MIDIReceiveApp.swift */; };
-		901A01262C1BEAA100CFA42A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01252C1BEAA100CFA42A /* ContentView.swift */; };
 		901A01282C1BEAA500CFA42A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 901A01272C1BEAA500CFA42A /* Assets.xcassets */; };
 		901A012B2C1BEAA500CFA42A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 901A012A2C1BEAA500CFA42A /* Preview Assets.xcassets */; };
+		901A01322C1BEADF00CFA42A /* PacketReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01312C1BEADF00CFA42A /* PacketReceiver.swift */; };
+		901A01342C1E232700CFA42A /* LogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01332C1E232700CFA42A /* LogModel.swift */; };
+		901A01362C1E713D00CFA42A /* MIDIDeviceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */; };
+		901A01392C1E900D00CFA42A /* MIDIDeviceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */; };
+		901A013B2C1E903B00CFA42A /* MIDILogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A013A2C1E903B00CFA42A /* MIDILogView.swift */; };
+		901A013E2C1E91A500CFA42A /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A013D2C1E91A500CFA42A /* AppState.swift */; };
+		901A01402C1E91C700CFA42A /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A013F2C1E91C700CFA42A /* Color+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		901A01202C1BEAA100CFA42A /* MIDIReceive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIReceive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		901A01232C1BEAA100CFA42A /* MIDIReceiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIReceiveApp.swift; sourceTree = "<group>"; };
-		901A01252C1BEAA100CFA42A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		901A01272C1BEAA500CFA42A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		901A012A2C1BEAA500CFA42A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		901A01312C1BEADF00CFA42A /* PacketReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketReceiver.swift; sourceTree = "<group>"; };
+		901A01332C1E232700CFA42A /* LogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogModel.swift; sourceTree = "<group>"; };
+		901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIDeviceRow.swift; sourceTree = "<group>"; };
+		901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIDeviceList.swift; sourceTree = "<group>"; };
+		901A013A2C1E903B00CFA42A /* MIDILogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDILogView.swift; sourceTree = "<group>"; };
+		901A013D2C1E91A500CFA42A /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		901A013F2C1E91C700CFA42A /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +63,12 @@
 		901A01222C1BEAA100CFA42A /* MIDIReceive */ = {
 			isa = PBXGroup;
 			children = (
+				901A013C2C1E918A00CFA42A /* Data */,
+				901A01372C1E8FCE00CFA42A /* Presentation */,
 				901A01232C1BEAA100CFA42A /* MIDIReceiveApp.swift */,
-				901A01252C1BEAA100CFA42A /* ContentView.swift */,
 				901A01272C1BEAA500CFA42A /* Assets.xcassets */,
 				901A01292C1BEAA500CFA42A /* Preview Content */,
+				901A01312C1BEADF00CFA42A /* PacketReceiver.swift */,
 			);
 			path = MIDIReceive;
 			sourceTree = "<group>";
@@ -65,6 +79,26 @@
 				901A012A2C1BEAA500CFA42A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		901A01372C1E8FCE00CFA42A /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				901A013F2C1E91C700CFA42A /* Color+Extension.swift */,
+				901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */,
+				901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */,
+				901A013A2C1E903B00CFA42A /* MIDILogView.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		901A013C2C1E918A00CFA42A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				901A01332C1E232700CFA42A /* LogModel.swift */,
+				901A013D2C1E91A500CFA42A /* AppState.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +171,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				901A01262C1BEAA100CFA42A /* ContentView.swift in Sources */,
+				901A013B2C1E903B00CFA42A /* MIDILogView.swift in Sources */,
+				901A01402C1E91C700CFA42A /* Color+Extension.swift in Sources */,
+				901A01392C1E900D00CFA42A /* MIDIDeviceList.swift in Sources */,
+				901A01342C1E232700CFA42A /* LogModel.swift in Sources */,
+				901A013E2C1E91A500CFA42A /* AppState.swift in Sources */,
 				901A01242C1BEAA100CFA42A /* MIDIReceiveApp.swift in Sources */,
+				901A01322C1BEADF00CFA42A /* PacketReceiver.swift in Sources */,
+				901A01362C1E713D00CFA42A /* MIDIDeviceRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
