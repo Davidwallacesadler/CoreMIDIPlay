@@ -11,7 +11,7 @@ struct MIDIDeviceList: View {
     
     @ObservedObject var logModel: LogModel
     
-    let onQueryTapped: () -> Void
+    let onQueryTapped: (PacketReceiver.QueryType) -> Void
     let onClearTapped: () -> Void
     
     @State private var isPresentingLogSheet: Bool = false
@@ -20,7 +20,16 @@ struct MIDIDeviceList: View {
         NavigationStack {
             List {
                 ForEach(logModel.foundDevices) { device in
-                    MIDIDeviceRow(device: device)
+                    Section {
+                        MIDIDeviceRow(device: device)
+                    }
+                }
+            }
+            .overlay {
+                if (logModel.foundDevices.isEmpty) {
+                    Text("No Devices/Endpoints Found")
+                        .font(.title2)
+                        .foregroundStyle(Color.gray)
                 }
             }
             .listStyle(.insetGrouped)
@@ -34,10 +43,14 @@ struct MIDIDeviceList: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
-                        Button {
-                            onQueryTapped()
-                        } label: {
-                            Text("Query")
+                        Menu("Query") {
+                            ForEach(PacketReceiver.QueryType.allCases) { queryType in
+                                Button {
+                                    onQueryTapped(queryType)
+                                } label: {
+                                    Text(queryType.description)
+                                }
+                            }
                         }
                         Spacer()
                         Button {
@@ -61,7 +74,7 @@ struct MIDIDeviceList: View {
 #Preview {
     MIDIDeviceList(
         logModel: LogModel(),
-        onQueryTapped: {},
+        onQueryTapped: { _ in },
         onClearTapped: {}
     )
 }

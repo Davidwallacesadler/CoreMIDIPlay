@@ -75,22 +75,39 @@ class PacketReceiver: NSObject {
         }
     }
     
-    func queryDevices() {
+    // MARK: - Queries
+    
+    func processAndLogMIDIQuery(type queryType: QueryType) {
         logModel.clear()
-        logModel.print("---------------- Devices ----------------")
-        let numberOfDevices = MIDIGetNumberOfDevices()
-        let numberOfExternalDevices = MIDIGetNumberOfExternalDevices()
-        let numberOfSources = MIDIGetNumberOfSources()
-        let numberOfDestinations = MIDIGetNumberOfDestinations()
         
-        logModel.print("--- COUNTS ---")
-        logModel.print(" # Devices = \(numberOfDevices)")
-        logModel.print(" # Extern. = \(numberOfExternalDevices)")
-        logModel.print(" # Sources = \(numberOfSources)")
-        logModel.print(" # Destin. = \(numberOfDestinations)")
+        logModel.print("Querying \(queryType.description)...")
+        switch queryType {
+        case .devices:
+            queryAllDevices()
+        case .externalDevices:
+            queryExternalDevices()
+        case .sourceEndpoints:
+            logModel.print("--- NOT IMPLEMENTED ---")
+        case .destinationEndpoints:
+            logModel.print("--- NOT IMPLEMENTED ---")
+        }
+    }
+    
+    private func queryAllDevices() {
+        let allDeviceCount = MIDIGetNumberOfDevices()
+        logModel.print(" # Devices = \(allDeviceCount)")
         
-        logModel.print("--- INSPECING DEVICES ---")
+        traverseAndLogDeviceHeirarchy(numberOfDevices: allDeviceCount)
+    }
+    
+    private func queryExternalDevices() {
+        let externalDeviceCount = MIDIGetNumberOfExternalDevices()
+        logModel.print(" # Devices = \(externalDeviceCount)")
         
+        traverseAndLogDeviceHeirarchy(numberOfDevices: externalDeviceCount)
+    }
+    
+    private func traverseAndLogDeviceHeirarchy(numberOfDevices: Int) {
         for i in 0..<numberOfDevices {
             logModel.print("Inspecting Device \(i + 1)....")
             let deviceRef = MIDIGetDevice(i)
@@ -137,7 +154,7 @@ class PacketReceiver: NSObject {
         } else {
             let objectProps = unmanagedObjectProps?.takeRetainedValue()
             if let device = extractDeviceFromObject(propList: objectProps) {
-                logModel.foundDevices.append(device)   
+                logModel.foundDevices.append(device)
             }
             logModel.print(objectProps?.debugDescription ?? "")
             
@@ -185,47 +202,28 @@ class PacketReceiver: NSObject {
         print("words: \(eventList.pointee.packet.words)")
         print("refCon: \(refCon.debugDescription)")
     }
-}
-
-struct MIDIDeviceModel {
-    let name: String?
-    let driver: String?
-    let manufacturer: String?
-    let model: String?
-    let imageURL: URL?
-    let isOffline: Bool?
-    let uniqueID: Int?
-}
-
-extension MIDIDeviceModel: CustomStringConvertible {
-    var description: String {
-"""
-_ MIDI DEVICE _
-name: \(name ?? "")
-driver: \(driver ?? "")
-manufacturer: \(manufacturer ?? "")
-model: \(model ?? "")
-imageURL: \(imageURL?.debugDescription ?? "")
-isOffline: \(String(describing: isOffline))
-uniqueID: \(String(describing: uniqueID))
-"""
-    }
-}
-
-extension MIDIDeviceModel: Identifiable {
-    var id: Int {
-        uniqueID ?? 0
-    }
-}
-
-
-enum OSStatusError: Int32, CustomStringConvertible {
-    case kMIDINotPermitted = -10844
     
-    var description: String {
-        switch self {
-        case .kMIDINotPermitted:
-            "The process does not have privileges for the requested operation."
+    // MARK: - Nested Types
+    
+    enum QueryType: Int, Identifiable, CaseIterable, CustomStringConvertible {
+        case devices,
+             externalDevices, 
+             sourceEndpoints,
+             destinationEndpoints
+        
+        var id: Int { self.rawValue }
+        
+        var description: String {
+            switch self {
+            case .devices:
+                "All Devices"
+            case .externalDevices:
+                "External Devices"
+            case .sourceEndpoints:
+                "Sources"
+            case .destinationEndpoints:
+                "Destinations"
+            }
         }
     }
 }

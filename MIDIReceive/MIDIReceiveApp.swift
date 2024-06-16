@@ -16,7 +16,7 @@ struct MIDIReceiveApp: App {
         WindowGroup {
             MIDIDeviceList(
                 logModel: appState.logModel,
-                onQueryTapped: appState.packetReceiver.queryDevices,
+                onQueryTapped: appState.packetReceiver.processAndLogMIDIQuery,
                 onClearTapped: appState.logModel.clear
             )
         }

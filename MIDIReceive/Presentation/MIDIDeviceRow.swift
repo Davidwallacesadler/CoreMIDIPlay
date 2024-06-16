@@ -44,7 +44,6 @@ struct MIDIDeviceRow: View {
                 value: device.driver ?? ""
             )
         }
-        .padding()
     }
 }
 
