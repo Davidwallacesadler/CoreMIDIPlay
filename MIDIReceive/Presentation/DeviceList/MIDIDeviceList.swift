@@ -71,6 +71,8 @@ struct MIDIDeviceList: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     MIDIDeviceList(
         logModel: LogModel(),

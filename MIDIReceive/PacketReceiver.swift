@@ -87,9 +87,9 @@ class PacketReceiver: NSObject {
         case .externalDevices:
             queryExternalDevices()
         case .sourceEndpoints:
-            logModel.print("--- NOT IMPLEMENTED ---")
+            querySources()
         case .destinationEndpoints:
-            logModel.print("--- NOT IMPLEMENTED ---")
+            queryDestinations()
         }
     }
     
@@ -97,7 +97,8 @@ class PacketReceiver: NSObject {
         let allDeviceCount = MIDIGetNumberOfDevices()
         logModel.print(" # Devices = \(allDeviceCount)")
         
-        traverseAndLogDeviceHeirarchy(numberOfDevices: allDeviceCount)
+//        traverseAndLogDeviceHeirarchy(numberOfDevices: allDeviceCount)
+        traverseDevicesForDisplay(numberOfDevices: allDeviceCount)
     }
     
     private func queryExternalDevices() {
@@ -107,11 +108,103 @@ class PacketReceiver: NSObject {
         traverseAndLogDeviceHeirarchy(numberOfDevices: externalDeviceCount)
     }
     
+    private func traverseDevicesForDisplay(numberOfDevices: Int) {
+        for i in 0..<numberOfDevices {
+            let deviceRef = MIDIGetDevice(i)
+            var deviceModel = extractDevice(fromRef: deviceRef)
+            
+            if deviceModel != nil {
+                let numberOfEntities = MIDIDeviceGetNumberOfEntities(deviceRef)
+                
+                for j in 0..<numberOfEntities {
+                    let entityRef = MIDIDeviceGetEntity(deviceRef, j)
+                    var entityModel = extractEntity(fromRef: entityRef)
+                    
+                    if entityModel != nil {
+                        let numberOfSources = MIDIEntityGetNumberOfSources(entityRef)
+                        
+                        for k in 0..<numberOfSources {
+                            let sourceRef = MIDIEntityGetSource(entityRef, k)
+                            let sourceModel = extractEndpoint(fromRef: sourceRef)
+                            
+                            if let sourceModel {
+                                entityModel?.sources.append(sourceModel)
+                            }
+                        }
+                        
+                        let numberOfDestinations = MIDIEntityGetNumberOfDestinations(entityRef)
+                        
+                        for l in 0..<numberOfDestinations {
+                            let destinationRef = MIDIEntityGetDestination(entityRef, l)
+                            let destinationModel = extractEndpoint(fromRef: destinationRef)
+                            
+                            if let destinationModel {
+                                entityModel?.destinations.append(destinationModel)
+                            }
+                        }
+                        
+                        deviceModel?.entities.append(entityModel!)
+                    }
+                }
+                
+                logModel.foundDevices.append(deviceModel!)
+            }
+        }
+    }
+    
+    private func extractDevice(fromRef deviceRef: MIDIDeviceRef) -> MIDIDeviceModel? {
+        var unmanagedObjectProps: Unmanaged<CFPropertyList>?
+        let status = MIDIObjectGetProperties(
+            deviceRef,
+            &unmanagedObjectProps,
+            false
+        )
+        if status != noErr {
+            logModel.print("Failed to get MIDI Object properties.")
+            return nil
+        } else {
+            let objectProps = unmanagedObjectProps?.takeRetainedValue()
+            return MIDIDeviceModel.from(propertyList: objectProps)
+        }
+    }
+    
+    private func extractEntity(fromRef entityRef: MIDIEntityRef) -> MIDIEntityModel? {
+        var unmanagedObjectProps: Unmanaged<CFPropertyList>?
+        let status = MIDIObjectGetProperties(
+            entityRef,
+            &unmanagedObjectProps,
+            false
+        )
+        if status != noErr {
+            logModel.print("Failed to get MIDI Object properties.")
+            return nil
+        } else {
+            let objectProps = unmanagedObjectProps?.takeRetainedValue()
+            return MIDIEntityModel.from(propertyList: objectProps)
+        }
+    }
+    
+    private func extractEndpoint(fromRef endpointRef: MIDIEndpointRef) -> MIDIEndpointModel? {
+        var unmanagedObjectProps: Unmanaged<CFPropertyList>?
+        let status = MIDIObjectGetProperties(
+            endpointRef,
+            &unmanagedObjectProps,
+            false
+        )
+        if status != noErr {
+            logModel.print("Failed to get MIDI Object properties.")
+            return nil
+        } else {
+            let objectProps = unmanagedObjectProps?.takeRetainedValue()
+            return MIDIEndpointModel.from(propertyList: objectProps)
+        }
+    }
+    
     private func traverseAndLogDeviceHeirarchy(numberOfDevices: Int) {
         for i in 0..<numberOfDevices {
             logModel.print("Inspecting Device \(i + 1)....")
             let deviceRef = MIDIGetDevice(i)
-            printMIDIObjectProps(objectRef: deviceRef)
+            printAndExtractMIDIDevice(deviceRef: deviceRef)
             
             let numberOfEntities = MIDIDeviceGetNumberOfEntities(deviceRef)
             logModel.print("\(numberOfEntities) Entities \(numberOfEntities == 0 ? "(ERROR)" : "")")
@@ -142,10 +235,10 @@ class PacketReceiver: NSObject {
         logModel.print("----------------")
     }
     
-    private func printMIDIObjectProps(objectRef: MIDIObjectRef) {
+    private func printAndExtractMIDIDevice(deviceRef: MIDIObjectRef) {
         var unmanagedObjectProps: Unmanaged<CFPropertyList>?
         let status = MIDIObjectGetProperties(
-            objectRef,
+            deviceRef,
             &unmanagedObjectProps,
             true
         )
@@ -153,40 +246,50 @@ class PacketReceiver: NSObject {
             logModel.print("Failed to get MIDI Object properties.")
         } else {
             let objectProps = unmanagedObjectProps?.takeRetainedValue()
-            if let device = extractDeviceFromObject(propList: objectProps) {
+            logModel.print(objectProps?.debugDescription ?? "")
+            if let device = MIDIDeviceModel.from(propertyList: objectProps) {
                 logModel.foundDevices.append(device)
             }
-            logModel.print(objectProps?.debugDescription ?? "")
-            
         }
     }
     
-    private func extractDeviceFromObject(propList: CFPropertyList?) -> MIDIDeviceModel? {
-        guard let propDict = propList as? NSDictionary else { return nil }
+    private func querySources() {
+        let sourceCount = MIDIGetNumberOfSources()
+        logModel.print(" # Sources = \(sourceCount)")
         
-        let name = propDict["name"] as? String
-        let driver = propDict["driver"] as? String
-        let model = propDict["model"] as? String
-        let manufacturer = propDict["manufacturer"] as? String
-        let isOffline = propDict["offline"] as? Bool
-        let uniqueID = propDict["uniqueID"] as? Int
-        
-        let imageText = propDict["image"] as? String
-        let imageURL: URL? = if let imageText {
-            URL(string: imageText)
-        } else {
-            nil
+        for i in 0..<sourceCount {
+            let sourceRef = MIDIGetSource(i)
+            logModel.print("Inspecting Source Endpoint \(i + 1)....")
+            
+            printMIDIObjectProps(objectRef: sourceRef)
         }
+    }
+    
+    private func queryDestinations() {
+        let destinationCount = MIDIGetNumberOfDestinations()
+        logModel.print(" # Destinations = \(destinationCount)")
         
-        return MIDIDeviceModel(
-            name: name,
-            driver: driver,
-            manufacturer: manufacturer,
-            model: model,
-            imageURL: imageURL,
-            isOffline: isOffline,
-            uniqueID: uniqueID
+        for i in 0..<destinationCount {
+            let destinationRef = MIDIGetDestination(i)
+            logModel.print("Inspecting Destination Endpoint \(i + 1)....")
+            
+            printMIDIObjectProps(objectRef: destinationRef)
+        }
+    }
+    
+    private func printMIDIObjectProps(objectRef: MIDIObjectRef) {
+        var unmanagedObjectProps: Unmanaged<CFPropertyList>?
+        let status = MIDIObjectGetProperties(
+            objectRef,
+            &unmanagedObjectProps,
+            false
         )
+        if status != noErr {
+            logModel.print("Failed to get MIDI Object properties.")
+        } else {
+            let objectProps = unmanagedObjectProps?.takeRetainedValue()
+            logModel.print(objectProps?.debugDescription ?? "")
+        }
     }
     
     // MARK: - Handlers

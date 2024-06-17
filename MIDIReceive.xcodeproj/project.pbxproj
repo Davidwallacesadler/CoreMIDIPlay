@@ -19,6 +19,11 @@
 		901A01402C1E91C700CFA42A /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A013F2C1E91C700CFA42A /* Color+Extension.swift */; };
 		901A01422C1E92BD00CFA42A /* MIDIDeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01412C1E92BD00CFA42A /* MIDIDeviceModel.swift */; };
 		901A01442C1E933A00CFA42A /* OSStatusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01432C1E933A00CFA42A /* OSStatusError.swift */; };
+		901A01472C1FC43C00CFA42A /* MIDIEntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01462C1FC43C00CFA42A /* MIDIEntityModel.swift */; };
+		901A01492C1FC81E00CFA42A /* MIDIEndpointModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A01482C1FC81E00CFA42A /* MIDIEndpointModel.swift */; };
+		901A014B2C1FCB9800CFA42A /* PropertyListCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014A2C1FCB9800CFA42A /* PropertyListCreatable.swift */; };
+		901A014E2C1FD32400CFA42A /* MIDIEntityRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */; };
+		901A01502C1FD35500CFA42A /* ValueLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014F2C1FD35500CFA42A /* ValueLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +40,11 @@
 		901A013F2C1E91C700CFA42A /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		901A01412C1E92BD00CFA42A /* MIDIDeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIDeviceModel.swift; sourceTree = "<group>"; };
 		901A01432C1E933A00CFA42A /* OSStatusError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSStatusError.swift; sourceTree = "<group>"; };
+		901A01462C1FC43C00CFA42A /* MIDIEntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEntityModel.swift; sourceTree = "<group>"; };
+		901A01482C1FC81E00CFA42A /* MIDIEndpointModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointModel.swift; sourceTree = "<group>"; };
+		901A014A2C1FCB9800CFA42A /* PropertyListCreatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyListCreatable.swift; sourceTree = "<group>"; };
+		901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEntityRow.swift; sourceTree = "<group>"; };
+		901A014F2C1FD35500CFA42A /* ValueLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,10 +98,10 @@
 		901A01372C1E8FCE00CFA42A /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				901A014C2C1FD30300CFA42A /* DeviceList */,
 				901A013F2C1E91C700CFA42A /* Color+Extension.swift */,
-				901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */,
-				901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */,
 				901A013A2C1E903B00CFA42A /* MIDILogView.swift */,
+				901A014F2C1FD35500CFA42A /* ValueLabel.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -99,12 +109,33 @@
 		901A013C2C1E918A00CFA42A /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				901A01452C1FC41C00CFA42A /* MIDIObjects */,
 				901A01332C1E232700CFA42A /* LogModel.swift */,
 				901A013D2C1E91A500CFA42A /* AppState.swift */,
-				901A01412C1E92BD00CFA42A /* MIDIDeviceModel.swift */,
 				901A01432C1E933A00CFA42A /* OSStatusError.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		901A01452C1FC41C00CFA42A /* MIDIObjects */ = {
+			isa = PBXGroup;
+			children = (
+				901A01412C1E92BD00CFA42A /* MIDIDeviceModel.swift */,
+				901A01462C1FC43C00CFA42A /* MIDIEntityModel.swift */,
+				901A01482C1FC81E00CFA42A /* MIDIEndpointModel.swift */,
+				901A014A2C1FCB9800CFA42A /* PropertyListCreatable.swift */,
+			);
+			path = MIDIObjects;
+			sourceTree = "<group>";
+		};
+		901A014C2C1FD30300CFA42A /* DeviceList */ = {
+			isa = PBXGroup;
+			children = (
+				901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */,
+				901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */,
+				901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */,
+			);
+			path = DeviceList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,8 +212,13 @@
 				901A013B2C1E903B00CFA42A /* MIDILogView.swift in Sources */,
 				901A01402C1E91C700CFA42A /* Color+Extension.swift in Sources */,
 				901A01392C1E900D00CFA42A /* MIDIDeviceList.swift in Sources */,
+				901A014E2C1FD32400CFA42A /* MIDIEntityRow.swift in Sources */,
 				901A01342C1E232700CFA42A /* LogModel.swift in Sources */,
+				901A01472C1FC43C00CFA42A /* MIDIEntityModel.swift in Sources */,
+				901A01502C1FD35500CFA42A /* ValueLabel.swift in Sources */,
+				901A014B2C1FCB9800CFA42A /* PropertyListCreatable.swift in Sources */,
 				901A013E2C1E91A500CFA42A /* AppState.swift in Sources */,
+				901A01492C1FC81E00CFA42A /* MIDIEndpointModel.swift in Sources */,
 				901A01242C1BEAA100CFA42A /* MIDIReceiveApp.swift in Sources */,
 				901A01322C1BEADF00CFA42A /* PacketReceiver.swift in Sources */,
 				901A01422C1E92BD00CFA42A /* MIDIDeviceModel.swift in Sources */,
