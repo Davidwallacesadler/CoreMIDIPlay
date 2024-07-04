@@ -164,7 +164,10 @@ class PacketReceiver: NSObject {
             return nil
         } else {
             let objectProps = unmanagedObjectProps?.takeRetainedValue()
-            return MIDIDeviceModel.from(propertyList: objectProps)
+            
+            let device = MIDIDeviceModel.from(propertyList: objectProps)
+            logModel.print(device?.description ?? "")
+            return device
         }
     }
     
@@ -180,7 +183,10 @@ class PacketReceiver: NSObject {
             return nil
         } else {
             let objectProps = unmanagedObjectProps?.takeRetainedValue()
-            return MIDIEntityModel.from(propertyList: objectProps)
+            
+            let entity = MIDIEntityModel.from(propertyList: objectProps)
+            logModel.print(entity?.description ?? "")
+            return entity
         }
     }
     
@@ -196,7 +202,10 @@ class PacketReceiver: NSObject {
             return nil
         } else {
             let objectProps = unmanagedObjectProps?.takeRetainedValue()
-            return MIDIEndpointModel.from(propertyList: objectProps)
+            
+            let endpoint = MIDIEndpointModel.from(propertyList: objectProps)
+            logModel.print(endpoint?.description ?? "")
+            return endpoint
         }
     }
     
@@ -262,6 +271,17 @@ class PacketReceiver: NSObject {
             logModel.print("Inspecting Source Endpoint \(i + 1)....")
             
             printMIDIObjectProps(objectRef: sourceRef)
+            
+            let status = MIDIPortConnectSource(
+                inputPort,
+                sourceRef,
+                nil
+            )
+            if status != noErr {
+                logModel.print("Failed to connect port to source")
+            } else {
+                logModel.print("Successfully connected source to port")
+            }
         }
     }
     
@@ -295,15 +315,44 @@ class PacketReceiver: NSObject {
     // MARK: - Handlers
     
     private func handleClientStateChangeNotifications(_ message: UnsafePointer<MIDINotification>) {
-        logModel.print("MIDI RECEIVER:: MIDI client received state change with ID: \(message.pointee.messageID)")
+        DispatchQueue.main.async {
+            self.logModel.print("MIDI client received state change: \(message.pointee.messageID.description)")
+        }
     }
     
     private func handleReceivedMessages(eventList: UnsafePointer<MIDIEventList>, refCon: UnsafeMutableRawPointer?) {
-        print("--- MESSAGE RECEIVED ---")
-        print("Number of packets: \(eventList.pointee.numPackets)")
-        print("Protocol raw value: \(eventList.pointee.protocol.rawValue)")
-        print("words: \(eventList.pointee.packet.words)")
-        print("refCon: \(refCon.debugDescription)")
+        DispatchQueue.main.async {
+            self.logModel.print("--- MESSAGE RECEIVED ---")
+            self.logModel.print("Number of packets: \(eventList.pointee.numPackets)")
+            self.logModel.print("Protocol raw value: \(eventList.pointee.protocol.rawValue)")
+            self.logModel.print("words: \(eventList.pointee.packet.words)")
+            self.logModel.print("refCon: \(refCon.debugDescription)")
+        }
+        
+        // Iterate through the words/messages in each packet
+        if eventList.pointee.protocol == ._1_0 {
+            // Parse based on MIDI 1.0 spec
+            // If MIDI 1.0 should be 1 word... I think...
+            let eventPacket = eventList.pointee.packet
+            if let messageType = eventPacket.messageType,
+               let messageStatus = eventPacket.status {
+                switch messageType {
+                case .channelVoice1:
+                    if messageStatus == .noteOn {
+                        // Extract note
+                        logModel.print("Got Note On message with note value \(eventPacket.noteOnValue)")
+                        
+                        if let note = Note(midiValue: eventPacket.noteOnValue) {
+                            logModel.print("Note pressed was \(note.description)")
+                        }
+                    }
+                default:
+                    logModel.print("Got message of type \(messageType.description)")
+                }
+            }
+        } else {
+            // Parse based on MIDI 2.0 spec
+        }
     }
     
     // MARK: - Nested Types

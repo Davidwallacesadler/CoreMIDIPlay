@@ -24,6 +24,11 @@
 		901A014B2C1FCB9800CFA42A /* PropertyListCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014A2C1FCB9800CFA42A /* PropertyListCreatable.swift */; };
 		901A014E2C1FD32400CFA42A /* MIDIEntityRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */; };
 		901A01502C1FD35500CFA42A /* ValueLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901A014F2C1FD35500CFA42A /* ValueLabel.swift */; };
+		909DC60C2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909DC60B2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift */; };
+		909DC60F2C3650B9002F5BD6 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909DC60E2C3650B9002F5BD6 /* Note.swift */; };
+		90F94AEE2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F94AED2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift */; };
+		90F94AF22C2103610046FCE1 /* MIDICVStatus+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F94AF12C2103610046FCE1 /* MIDICVStatus+Extensions.swift */; };
+		90F94AF42C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F94AF32C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +50,11 @@
 		901A014A2C1FCB9800CFA42A /* PropertyListCreatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyListCreatable.swift; sourceTree = "<group>"; };
 		901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEntityRow.swift; sourceTree = "<group>"; };
 		901A014F2C1FD35500CFA42A /* ValueLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueLabel.swift; sourceTree = "<group>"; };
+		909DC60B2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIMessageType+Extensions.swift"; sourceTree = "<group>"; };
+		909DC60E2C3650B9002F5BD6 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		90F94AED2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDINotificationMessageID+Extensions.swift"; sourceTree = "<group>"; };
+		90F94AF12C2103610046FCE1 /* MIDICVStatus+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDICVStatus+Extensions.swift"; sourceTree = "<group>"; };
+		90F94AF32C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIEventPacket+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,12 +87,11 @@
 		901A01222C1BEAA100CFA42A /* MIDIReceive */ = {
 			isa = PBXGroup;
 			children = (
+				901A01232C1BEAA100CFA42A /* MIDIReceiveApp.swift */,
+				90F94AEF2C20F6410046FCE1 /* Core */,
 				901A013C2C1E918A00CFA42A /* Data */,
 				901A01372C1E8FCE00CFA42A /* Presentation */,
-				901A01232C1BEAA100CFA42A /* MIDIReceiveApp.swift */,
-				901A01272C1BEAA500CFA42A /* Assets.xcassets */,
-				901A01292C1BEAA500CFA42A /* Preview Content */,
-				901A01312C1BEADF00CFA42A /* PacketReceiver.swift */,
+				90F94AF02C20F6870046FCE1 /* Resources */,
 			);
 			path = MIDIReceive;
 			sourceTree = "<group>";
@@ -109,6 +118,7 @@
 		901A013C2C1E918A00CFA42A /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				909DC60D2C3650A7002F5BD6 /* NoteObjects */,
 				901A01452C1FC41C00CFA42A /* MIDIObjects */,
 				901A01332C1E232700CFA42A /* LogModel.swift */,
 				901A013D2C1E91A500CFA42A /* AppState.swift */,
@@ -136,6 +146,35 @@
 				901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */,
 			);
 			path = DeviceList;
+			sourceTree = "<group>";
+		};
+		909DC60D2C3650A7002F5BD6 /* NoteObjects */ = {
+			isa = PBXGroup;
+			children = (
+				909DC60E2C3650B9002F5BD6 /* Note.swift */,
+			);
+			path = NoteObjects;
+			sourceTree = "<group>";
+		};
+		90F94AEF2C20F6410046FCE1 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				901A01312C1BEADF00CFA42A /* PacketReceiver.swift */,
+				90F94AED2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift */,
+				90F94AF12C2103610046FCE1 /* MIDICVStatus+Extensions.swift */,
+				909DC60B2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift */,
+				90F94AF32C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		90F94AF02C20F6870046FCE1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				901A01292C1BEAA500CFA42A /* Preview Content */,
+				901A01272C1BEAA500CFA42A /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,8 +247,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90F94AF22C2103610046FCE1 /* MIDICVStatus+Extensions.swift in Sources */,
 				901A01442C1E933A00CFA42A /* OSStatusError.swift in Sources */,
 				901A013B2C1E903B00CFA42A /* MIDILogView.swift in Sources */,
+				909DC60C2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift in Sources */,
 				901A01402C1E91C700CFA42A /* Color+Extension.swift in Sources */,
 				901A01392C1E900D00CFA42A /* MIDIDeviceList.swift in Sources */,
 				901A014E2C1FD32400CFA42A /* MIDIEntityRow.swift in Sources */,
@@ -220,6 +261,9 @@
 				901A013E2C1E91A500CFA42A /* AppState.swift in Sources */,
 				901A01492C1FC81E00CFA42A /* MIDIEndpointModel.swift in Sources */,
 				901A01242C1BEAA100CFA42A /* MIDIReceiveApp.swift in Sources */,
+				90F94AEE2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift in Sources */,
+				909DC60F2C3650B9002F5BD6 /* Note.swift in Sources */,
+				90F94AF42C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift in Sources */,
 				901A01322C1BEADF00CFA42A /* PacketReceiver.swift in Sources */,
 				901A01422C1E92BD00CFA42A /* MIDIDeviceModel.swift in Sources */,
 				901A01362C1E713D00CFA42A /* MIDIDeviceRow.swift in Sources */,
@@ -355,7 +399,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MIDIReceive/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MIDIReceive/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = 6F6B2VJ5ZH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -384,7 +428,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MIDIReceive/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MIDIReceive/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = 6F6B2VJ5ZH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

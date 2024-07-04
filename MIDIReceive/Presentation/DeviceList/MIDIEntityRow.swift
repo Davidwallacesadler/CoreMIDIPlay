@@ -106,7 +106,7 @@ struct MIDIEntityRow: View {
                     } else {
                         ""
                     }
-                    ValueLabel(label: "Source ID", value: uniqueIDValue)
+                    ValueLabel(label: "Source", value: uniqueIDValue)
                         .padding(.vertical)
                         .background(Color.gray)
                         .clipShape(RoundedRectangle(cornerRadius: 16.0))
@@ -126,7 +126,7 @@ struct MIDIEntityRow: View {
                     } else {
                         ""
                     }
-                    ValueLabel(label: "Destination ID", value: uniqueIDValue)
+                    ValueLabel(label: "Destination", value: uniqueIDValue)
                         .padding(.vertical)
                         .background(Color.gray)
                         .clipShape(RoundedRectangle(cornerRadius: 16.0))
@@ -143,5 +143,5 @@ struct MIDIEntityRow: View {
 // MARK: - Preview
 
 #Preview {
-    Text("OTOTO")
+    MIDIEntityRow(entity: MIDIEntityModel(name: "Foo", uniqueID: 1, protocol: 1, inEndpoint: 1, outEndpoint: 2, maxSystemExclusiveSpeed: 1, isCable: true, isEmbedded: false, sources: [], destinations: []))
 }

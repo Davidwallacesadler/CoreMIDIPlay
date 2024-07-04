@@ -28,7 +28,7 @@ struct MIDIDeviceModel {
 extension MIDIDeviceModel: CustomStringConvertible {
     var description: String {
 """
-_ MIDI DEVICE _
+___ MIDI DEVICE ___
 name: \(name ?? "")
 driver: \(driver ?? "")
 manufacturer: \(manufacturer ?? "")
@@ -69,17 +69,6 @@ extension MIDIDeviceModel: PropertyListCreatable {
         let isUSBMIDI2_0 = propDict["USB MIDI 2.0"] as? Bool
         let usbLocationID = propDict["USBLocationID"] as? Int
         let usbVendorProduct = propDict["USBVendorProduct"] as? Int
-        
-        // TODO:
-//        var entities: [MIDIEntityModel] = []
-//        if let entityList = propDict["entites"] as? NSArray {
-//            for i in 0..<entityList.count {
-//                let entityPropertyList = entityList.object(at: i) as CFPropertyList
-//                if let entity = MIDIEntityModel.from(propertyList: entityPropertyList) {
-//                    entities.append(entity)
-//                }
-//            }
-//        }
         
         let imageText = propDict["image"] as? String
         let imageURL: URL? = if let imageText {

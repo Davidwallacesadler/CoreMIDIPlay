@@ -11,6 +11,18 @@ struct MIDIEndpointModel {
     let uniqueID: Int?
 }
 
+// MARK: - CustomStringConvertible
+
+extension MIDIEndpointModel: CustomStringConvertible {
+    var description: String {
+"""
+___ MIDI ENDPOINT ___
+uniqueID: \(String(describing: uniqueID))
+"""
+    }
+}
+
+
 // MARK: - Identifiable
 
 extension MIDIEndpointModel: Identifiable {

@@ -26,7 +26,7 @@ struct MIDIEntityModel {
 extension MIDIEntityModel: CustomStringConvertible {
     var description: String {
 """
-_ MIDI ENTITY _
+___ MIDI ENTITY ___
 name: \(name ?? "")
 uniqueID: \(String(describing: uniqueID))
 protocol: MIDI \(String(describing: self.protocol))
