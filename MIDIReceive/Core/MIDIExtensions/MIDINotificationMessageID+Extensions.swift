@@ -8,6 +8,7 @@
 import CoreMIDI
 
 extension MIDINotificationMessageID: CustomStringConvertible {
+    
     public var description: String {
         switch self {
         case .msgSetupChanged:

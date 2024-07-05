@@ -14,9 +14,13 @@ struct MIDIReceiveApp: App {
     
     var body: some Scene {
         WindowGroup {
+            
             MIDIDeviceList(
                 logModel: appState.logModel,
                 onQueryTapped: appState.packetReceiver.processAndLogMIDIQuery,
+                onSourceTapped: { deviceEntityAndSourceIndices in
+                    appState.packetReceiver.connectPortToSource(following: deviceEntityAndSourceIndices)
+                },
                 onClearTapped: appState.logModel.clear
             )
         }

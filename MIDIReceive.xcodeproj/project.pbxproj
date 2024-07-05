@@ -107,10 +107,8 @@
 		901A01372C1E8FCE00CFA42A /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				901A014C2C1FD30300CFA42A /* DeviceList */,
 				901A013F2C1E91C700CFA42A /* Color+Extension.swift */,
-				901A013A2C1E903B00CFA42A /* MIDILogView.swift */,
-				901A014F2C1FD35500CFA42A /* ValueLabel.swift */,
+				901A014C2C1FD30300CFA42A /* DeviceList */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -118,11 +116,11 @@
 		901A013C2C1E918A00CFA42A /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				909DC60D2C3650A7002F5BD6 /* NoteObjects */,
-				901A01452C1FC41C00CFA42A /* MIDIObjects */,
-				901A01332C1E232700CFA42A /* LogModel.swift */,
 				901A013D2C1E91A500CFA42A /* AppState.swift */,
+				901A01332C1E232700CFA42A /* LogModel.swift */,
+				909DC60E2C3650B9002F5BD6 /* Note.swift */,
 				901A01432C1E933A00CFA42A /* OSStatusError.swift */,
+				901A01452C1FC41C00CFA42A /* MIDIObjects */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -144,26 +142,28 @@
 				901A01382C1E900D00CFA42A /* MIDIDeviceList.swift */,
 				901A01352C1E713D00CFA42A /* MIDIDeviceRow.swift */,
 				901A014D2C1FD32400CFA42A /* MIDIEntityRow.swift */,
+				901A013A2C1E903B00CFA42A /* MIDILogView.swift */,
+				901A014F2C1FD35500CFA42A /* ValueLabel.swift */,
 			);
 			path = DeviceList;
 			sourceTree = "<group>";
 		};
-		909DC60D2C3650A7002F5BD6 /* NoteObjects */ = {
+		909DC6102C38660E002F5BD6 /* MIDIExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				909DC60E2C3650B9002F5BD6 /* Note.swift */,
+				90F94AF12C2103610046FCE1 /* MIDICVStatus+Extensions.swift */,
+				90F94AF32C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift */,
+				909DC60B2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift */,
+				90F94AED2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift */,
 			);
-			path = NoteObjects;
+			path = MIDIExtensions;
 			sourceTree = "<group>";
 		};
 		90F94AEF2C20F6410046FCE1 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				901A01312C1BEADF00CFA42A /* PacketReceiver.swift */,
-				90F94AED2C20B04B0046FCE1 /* MIDINotificationMessageID+Extensions.swift */,
-				90F94AF12C2103610046FCE1 /* MIDICVStatus+Extensions.swift */,
-				909DC60B2C364D18002F5BD6 /* MIDIMessageType+Extensions.swift */,
-				90F94AF32C2103A80046FCE1 /* MIDIEventPacket+Extensions.swift */,
+				909DC6102C38660E002F5BD6 /* MIDIExtensions */,
 			);
 			path = Core;
 			sourceTree = "<group>";

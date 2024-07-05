@@ -7,11 +7,14 @@
 
 import SwiftUI
 
+typealias DeviceEntitySourceIndicies = (deviceIndex: Int, entityIndex: Int, sourceIndex: Int)
+
 struct MIDIDeviceList: View {
     
     @ObservedObject var logModel: LogModel
     
     let onQueryTapped: (PacketReceiver.QueryType) -> Void
+    let onSourceTapped: (DeviceEntitySourceIndicies) -> Void
     let onClearTapped: () -> Void
     
     @State private var isPresentingLogSheet: Bool = false
@@ -19,15 +22,22 @@ struct MIDIDeviceList: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(logModel.foundDevices) { device in
+                ForEach(logModel.foundDevices.indices, id: \.self) { deviceIdx in
+                    let device = logModel.foundDevices[deviceIdx]
                     Section {
-                        MIDIDeviceRow(device: device)
+                        MIDIDeviceRow(
+                            device: device,
+                            onSourceTapped: { entityIdx, sourceIdx in
+                                onSourceTapped((deviceIdx, entityIdx, sourceIdx))
+                                isPresentingLogSheet = true
+                            }
+                        )
                     }
                 }
             }
             .overlay {
                 if (logModel.foundDevices.isEmpty) {
-                    Text("No Devices/Endpoints Found")
+                    Text("No Devices Found")
                         .font(.title2)
                         .foregroundStyle(Color.gray)
                 }
@@ -43,14 +53,10 @@ struct MIDIDeviceList: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
-                        Menu("Query") {
-                            ForEach(PacketReceiver.QueryType.allCases) { queryType in
-                                Button {
-                                    onQueryTapped(queryType)
-                                } label: {
-                                    Text(queryType.description)
-                                }
-                            }
+                        Button {
+                            onQueryTapped(PacketReceiver.QueryType.devices)
+                        } label: {
+                            Text("Query")
                         }
                         Spacer()
                         Button {
@@ -76,7 +82,8 @@ struct MIDIDeviceList: View {
 #Preview {
     MIDIDeviceList(
         logModel: LogModel(),
-        onQueryTapped: { _ in },
+        onQueryTapped: { _ in }, 
+        onSourceTapped: { _ in },
         onClearTapped: {}
     )
 }

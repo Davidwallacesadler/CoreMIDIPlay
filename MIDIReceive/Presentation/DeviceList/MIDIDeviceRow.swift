@@ -10,6 +10,7 @@ import SwiftUI
 struct MIDIDeviceRow: View {
     
     let device: MIDIDeviceModel
+    let onSourceTapped: (Int, Int) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -100,8 +101,14 @@ struct MIDIDeviceRow: View {
             } else {
                 Text("Entities (\(device.entities.count))")
                     .font(.headline)
-                ForEach(device.entities) { entity in
-                    MIDIEntityRow(entity: entity)
+                ForEach(device.entities.indices, id: \.self) { entityIdx in
+                    let entity = device.entities[entityIdx]
+                    MIDIEntityRow(
+                        entity: entity,
+                        onSourceTapped: { sourceIdx in
+                            onSourceTapped(entityIdx, sourceIdx)
+                        }
+                    )
                 }
             }
         }
@@ -160,6 +167,7 @@ private struct ColoredChip: View {
             usbLocationID: 10,
             usbVendorProduct: 1000,
             entities: []
-        )
+        ), 
+        onSourceTapped: { _, _ in }
     )
 }

@@ -15,7 +15,7 @@ struct Note {
     let octave: Octave
     
     init(pitch: Pitch, octave: Octave) {
-        self.midiValue = UInt32(pitch.rawValue + (12 * octave.rawValue))
+        self.midiValue = UInt32(pitch.rawValue + (12 * (octave.rawValue + 1)))
         self.pitch = pitch
         self.octave = octave
     }
@@ -68,10 +68,10 @@ extension Note {
     }
     
     enum Octave: Int, CustomStringConvertible {
-        case dblContra = -1, subContra, contra, great, small, oneLine, twoLine, threeLine, fourLine, fiveLine, sixLine
+        case dblContra, subContra, contra, great, small, oneLine, twoLine, threeLine, fourLine, fiveLine, sixLine
         
         var description: String {
-            "\(self.rawValue)"
+            "\(self.rawValue - 1)"
         }
     }
 }

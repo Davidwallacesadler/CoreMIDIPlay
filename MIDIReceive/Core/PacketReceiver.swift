@@ -97,15 +97,14 @@ class PacketReceiver: NSObject {
         let allDeviceCount = MIDIGetNumberOfDevices()
         logModel.print(" # Devices = \(allDeviceCount)")
         
-//        traverseAndLogDeviceHeirarchy(numberOfDevices: allDeviceCount)
         traverseDevicesForDisplay(numberOfDevices: allDeviceCount)
     }
     
     private func queryExternalDevices() {
         let externalDeviceCount = MIDIGetNumberOfExternalDevices()
-        logModel.print(" # Devices = \(externalDeviceCount)")
+        logModel.print(" # External Devices = \(externalDeviceCount)")
         
-        traverseAndLogDeviceHeirarchy(numberOfDevices: externalDeviceCount)
+        traverseDevicesForDisplay(numberOfDevices: externalDeviceCount)
     }
     
     private func traverseDevicesForDisplay(numberOfDevices: Int) {
@@ -285,6 +284,26 @@ class PacketReceiver: NSObject {
         }
     }
     
+    func connectPortToSource(following indicies: DeviceEntitySourceIndicies) {
+        let deviceRef = MIDIGetDevice(indicies.deviceIndex)
+        let entityRef = MIDIDeviceGetEntity(deviceRef, indicies.entityIndex)
+        let sourceRef = MIDIEntityGetSource(entityRef, indicies.sourceIndex)
+        
+        let status = MIDIPortConnectSource(
+            inputPort,
+            sourceRef,
+            nil
+        )
+        
+        DispatchQueue.main.async {
+            if status != noErr {
+                self.logModel.print("Failed to connect port to source")
+            } else {
+                self.logModel.print("Successfully connected source to port")
+            }
+        }
+    }
+    
     private func queryDestinations() {
         let destinationCount = MIDIGetNumberOfDestinations()
         logModel.print(" # Destinations = \(destinationCount)")
@@ -321,37 +340,55 @@ class PacketReceiver: NSObject {
     }
     
     private func handleReceivedMessages(eventList: UnsafePointer<MIDIEventList>, refCon: UnsafeMutableRawPointer?) {
+        let eventPacket = eventList.pointee.packet
+        
         DispatchQueue.main.async {
             self.logModel.print("--- MESSAGE RECEIVED ---")
+            self.logModel.print(eventPacket.description)
             self.logModel.print("Number of packets: \(eventList.pointee.numPackets)")
-            self.logModel.print("Protocol raw value: \(eventList.pointee.protocol.rawValue)")
             self.logModel.print("words: \(eventList.pointee.packet.words)")
-            self.logModel.print("refCon: \(refCon.debugDescription)")
         }
         
-        // Iterate through the words/messages in each packet
         if eventList.pointee.protocol == ._1_0 {
-            // Parse based on MIDI 1.0 spec
-            // If MIDI 1.0 should be 1 word... I think...
-            let eventPacket = eventList.pointee.packet
-            if let messageType = eventPacket.messageType,
-               let messageStatus = eventPacket.status {
-                switch messageType {
-                case .channelVoice1:
-                    if messageStatus == .noteOn {
-                        // Extract note
-                        logModel.print("Got Note On message with note value \(eventPacket.noteOnValue)")
-                        
-                        if let note = Note(midiValue: eventPacket.noteOnValue) {
-                            logModel.print("Note pressed was \(note.description)")
-                        }
-                    }
-                default:
-                    logModel.print("Got message of type \(messageType.description)")
-                }
-            }
+            handle1_0Packet(eventPacket)
         } else {
-            // Parse based on MIDI 2.0 spec
+            handle2_0Packet(eventPacket)
+        }
+    }
+    
+    private func handle1_0Packet(_ eventPacket: MIDIEventPacket) {
+        guard let messageType = eventPacket.messageType,
+              let messageStatus = eventPacket.status else { return }
+        
+        DispatchQueue.main.async {
+            switch messageType {
+            case .channelVoice1:
+                if messageStatus == .noteOn || messageStatus == .noteOff {
+                    let noteValue = eventPacket.words.0 >> 8 & 0xFF
+                    let velocityValue = eventPacket.words.0 & 0xFF
+                    let keyActionDescription = messageStatus == .noteOn ? "pressed" : "released"
+                    
+                    self.logModel.print("note \(noteValue), velocity \(velocityValue)")
+                    
+                    if let note = Note(midiValue: noteValue) {
+                        self.logModel.print("\(note.description) \(keyActionDescription)")
+                    }
+                }
+            default:
+                self.logModel.print("MIDI 1.0 -- MESSAGE NOT HANDLED")
+            }
+        }
+    }
+    
+    private func handle2_0Packet(_ eventPacket: MIDIEventPacket) {
+        guard let messageType = eventPacket.messageType,
+              let messageStatus = eventPacket.status else { return }
+        
+        DispatchQueue.main.async {
+            switch messageType {
+            default:
+                self.logModel.print("MIDI 2.0 -- MESSAGE NOT HANDLED")
+            }
         }
     }
     

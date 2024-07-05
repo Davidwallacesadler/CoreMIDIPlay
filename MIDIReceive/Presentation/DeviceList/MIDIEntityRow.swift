@@ -11,6 +11,8 @@ struct MIDIEntityRow: View {
     
     let entity: MIDIEntityModel
     
+    let onSourceTapped: (Int) -> Void
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -100,16 +102,21 @@ struct MIDIEntityRow: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical)
             } else {
-                ForEach(entity.sources) { source in
+                ForEach(entity.sources.indices, id: \.self) { sourceIdx in
+                    let source = entity.sources[sourceIdx]
                     let uniqueIDValue = if let uniqueID = source.uniqueID {
                         String(describing: uniqueID)
                     } else {
                         ""
                     }
-                    ValueLabel(label: "Source", value: uniqueIDValue)
-                        .padding(.vertical)
-                        .background(Color.gray)
-                        .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                    Button {
+                        onSourceTapped(sourceIdx)
+                    } label: {
+                        ValueLabel(label: "Source", value: uniqueIDValue)
+                            .padding(.vertical)
+                            .background(Color.gray)
+                            .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                    }
                 }
             }
             
@@ -143,5 +150,19 @@ struct MIDIEntityRow: View {
 // MARK: - Preview
 
 #Preview {
-    MIDIEntityRow(entity: MIDIEntityModel(name: "Foo", uniqueID: 1, protocol: 1, inEndpoint: 1, outEndpoint: 2, maxSystemExclusiveSpeed: 1, isCable: true, isEmbedded: false, sources: [], destinations: []))
+    MIDIEntityRow(
+        entity: MIDIEntityModel(
+            name: "Foo",
+            uniqueID: 1,
+            protocol: 1,
+            inEndpoint: 1,
+            outEndpoint: 2,
+            maxSystemExclusiveSpeed: 1,
+            isCable: true,
+            isEmbedded: false,
+            sources: [],
+            destinations: []
+        ),
+        onSourceTapped: { _ in }
+    )
 }

@@ -25,17 +25,9 @@ extension MIDIEventPacket {
     /// See the section `Extracting a nibble from a byte` here https://en.wikipedia.org/wiki/Nibble
     ///
     /// For example, given a 32 bit word `10010000 01110000 00000000 00000000`:
-    /// After the shift we are right with `10010000 0111`. Then `10010000 0111` & `1111` -> `0111`
-    ///
-    /// Note: `0x00f` (hex)  == `1111` (bin)
+    /// After the shift we are right with `10010000 0111`. Then `10010000 0111` & `11` -> `0111`
     var status: MIDICVStatus? {
         MIDICVStatus(rawValue: (words.0 >> 20) & 0xF)
-    }
-    
-    /// For example, given a 32 bit word `10010000 01110000 00000000 00000000`
-    /// Shift right 8 -> `10010000 01110000 00100100`" Then `10010000 01110000 00100100` & `11111111` -> `00100100`
-    var noteOnValue: UInt32 {
-        words.0 >> 8 & 0xFF
     }
     
     var hexString: String {
