@@ -295,12 +295,10 @@ class PacketReceiver: NSObject {
             nil
         )
         
-        DispatchQueue.main.async {
-            if status != noErr {
-                self.logModel.print("Failed to connect port to source")
-            } else {
-                self.logModel.print("Successfully connected source to port")
-            }
+        if status != noErr {
+            self.logModel.print("Failed to connect port to source")
+        } else {
+            self.logModel.print("Successfully connected source to port")
         }
     }
     
@@ -334,20 +332,16 @@ class PacketReceiver: NSObject {
     // MARK: - Handlers
     
     private func handleClientStateChangeNotifications(_ message: UnsafePointer<MIDINotification>) {
-        DispatchQueue.main.async {
-            self.logModel.print("MIDI client received state change: \(message.pointee.messageID.description)")
-        }
+        self.logModel.print("MIDI client received state change: \(message.pointee.messageID.description)")
     }
     
     private func handleReceivedMessages(eventList: UnsafePointer<MIDIEventList>, refCon: UnsafeMutableRawPointer?) {
         let eventPacket = eventList.pointee.packet
         
-        DispatchQueue.main.async {
-            self.logModel.print("--- MESSAGE RECEIVED ---")
-            self.logModel.print(eventPacket.description)
-            self.logModel.print("Number of packets: \(eventList.pointee.numPackets)")
-            self.logModel.print("words: \(eventList.pointee.packet.words)")
-        }
+        self.logModel.print("--- MESSAGE RECEIVED ---")
+        self.logModel.print(eventPacket.description)
+        self.logModel.print("Number of packets: \(eventList.pointee.numPackets)")
+        self.logModel.print("words: \(eventList.pointee.packet.words)")
         
         if eventList.pointee.protocol == ._1_0 {
             handle1_0Packet(eventPacket)
@@ -360,23 +354,25 @@ class PacketReceiver: NSObject {
         guard let messageType = eventPacket.messageType,
               let messageStatus = eventPacket.status else { return }
         
-        DispatchQueue.main.async {
-            switch messageType {
-            case .channelVoice1:
-                if messageStatus == .noteOn || messageStatus == .noteOff {
-                    let noteValue = eventPacket.words.0 >> 8 & 0xFF
-                    let velocityValue = eventPacket.words.0 & 0xFF
-                    let keyActionDescription = messageStatus == .noteOn ? "pressed" : "released"
-                    
-                    self.logModel.print("note \(noteValue), velocity \(velocityValue)")
-                    
-                    if let note = Note(midiValue: noteValue) {
-                        self.logModel.print("\(note.description) \(keyActionDescription)")
-                    }
+        switch messageType {
+        case .channelVoice1:
+            if messageStatus == .noteOn || messageStatus == .noteOff {
+                let noteValue = eventPacket.words.0 >> 8 & 0xFF
+                let velocityValue = eventPacket.words.0 & 0xFF
+                let keyActionDescription = if messageStatus == .noteOn {
+                    velocityValue != 0 ? "pressed" : "released"
+                } else {
+                    "released"
                 }
-            default:
-                self.logModel.print("MIDI 1.0 -- MESSAGE NOT HANDLED")
+                
+                self.logModel.print("note \(noteValue), velocity \(velocityValue)")
+                
+                if let note = Note(midiValue: noteValue) {
+                    self.logModel.print("\(note.description) \(keyActionDescription)")
+                }
             }
+        default:
+            self.logModel.print("MIDI 1.0 -- MESSAGE NOT HANDLED")
         }
     }
     
@@ -384,11 +380,9 @@ class PacketReceiver: NSObject {
         guard let messageType = eventPacket.messageType,
               let messageStatus = eventPacket.status else { return }
         
-        DispatchQueue.main.async {
-            switch messageType {
-            default:
-                self.logModel.print("MIDI 2.0 -- MESSAGE NOT HANDLED")
-            }
+        switch messageType {
+        default:
+            self.logModel.print("MIDI 2.0 -- MESSAGE NOT HANDLED")
         }
     }
     

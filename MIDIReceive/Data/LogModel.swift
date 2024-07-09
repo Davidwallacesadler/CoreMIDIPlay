@@ -17,7 +17,10 @@ class LogModel: ObservableObject {
     }
     
     func print(_ text: String, printToTerminal: Bool = false) {
-        logData += text + "\n"
+        DispatchQueue.main.async {
+            self.logData += text + "\n"
+        }
+        
         if printToTerminal {
             Swift.print(text)
         }
