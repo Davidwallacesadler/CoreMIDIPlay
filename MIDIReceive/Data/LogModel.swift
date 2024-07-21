@@ -32,3 +32,11 @@ class LogModel: ObservableObject {
     }
     
 }
+
+protocol Logger {
+    func log(message: String, severity: Severity)
+}
+
+enum Severity {
+    case debug, warning, error
+}

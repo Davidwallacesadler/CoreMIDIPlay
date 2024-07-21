@@ -9,7 +9,7 @@ import Foundation
 
 struct Note {
     
-    let midiValue: UInt32
+    let midiValue: UInt32 // TODO: UInt8
     
     let pitch: Pitch
     let octave: Octave
